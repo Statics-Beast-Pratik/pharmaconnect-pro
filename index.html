@@ -3,224 +3,195 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PharmaConnect Pro - Strict SFA System</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>PharmaConnect Pro - Enterprise SFA Ecosystem</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-        body { background: #f0f4f8; color: #1e293b; overflow: hidden; height: 100vh; }
+        :root {
+            --bg-primary: #0b0f19; --bg-secondary: #111827; --bg-surface: #1f2937;
+            --text-main: #f9fafb; --text-muted: #9ca3af; --accent-blue: #3b82f6;
+            --accent-green: #10b981; --accent-amber: #f59e0b; --accent-red: #ef4444; --border-color: #374151;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background: var(--bg-primary); color: var(--text-main); overflow: hidden; height: 100vh; }
         
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* --- LOGIN SCREEN --- */
         #login-screen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
-            display: flex; justify-content: center; align-items: center; z-index: 100;
-            transition: all 0.5s ease;
+            background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
+            display: flex; justify-content: center; align-items: center; z-index: 1000;
+            transition: transform 0.5s ease-in-out;
         }
         .login-card {
-            background: white; padding: 40px; border-radius: 20px;
-            width: 100%; max-width: 420px; box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-            text-align: center; animation: fadeIn 0.6s ease;
+            background: var(--bg-secondary); padding: 40px; border-radius: 24px;
+            width: 100%; max-width: 440px; border: 1px solid var(--border-color); text-align: center;
         }
-        .login-card i.logo-icon { font-size: 50px; color: #2563eb; margin-bottom: 10px; }
-        .login-card h2 { color: #0f172a; margin-bottom: 20px; font-weight: 700; }
-        
-        .input-group { position: relative; margin-bottom: 20px; text-align: left; }
-        .input-group label { display: block; font-size: 13px; font-weight: 600; color: #334155; margin-bottom: 6px; }
-        .input-group i { position: absolute; left: 15px; top: 38px; color: #94a3b8; }
-        .input-group input, .input-group select {
-            width: 100%; padding: 12px 12px 12px 45px; border: 2px solid #e2e8f0;
-            border-radius: 10px; font-size: 14px; outline: none;
+        .login-card i { font-size: 50px; color: var(--accent-blue); margin-bottom: 15px; }
+        .login-card h2 { font-size: 24px; margin-bottom: 8px; font-weight: 700; }
+        .login-card p { color: var(--text-muted); font-size: 14px; margin-bottom: 25px; }
+        .input-group { text-align: left; margin-bottom: 20px; }
+        .input-group label { display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 8px; font-weight: 600; text-transform: uppercase; }
+        .input-group select {
+            width: 100%; padding: 14px; background: var(--bg-surface);
+            border: 1px solid var(--border-color); border-radius: 12px; color: var(--text-main); outline: none;
         }
-        .input-group input:focus, .input-group select:focus { border-color: #2563eb; }
-        
         .login-btn {
-            width: 100%; padding: 14px; background: #2563eb; color: white; border: none;
-            border-radius: 10px; font-size: 16px; font-weight: 600; cursor: pointer; transition: 0.3s;
+            width: 100%; padding: 14px; background: var(--accent-blue); color: white; border: none;
+            border-radius: 12px; font-size: 15px; font-weight: 600; cursor: pointer;
         }
-        .login-btn:hover { background: #1d4ed8; transform: translateY(-2px); }
 
-        /* --- APP SYSTEM --- */
-        #app-container { display: flex; height: 100vh; width: 100vw; visibility: hidden; opacity: 0; transition: opacity 0.5s ease; }
+        #app-container { display: flex; height: 100vh; width: 100vw; visibility: hidden; opacity: 0; transition: opacity 0.3s; }
+        .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border-color); padding: 25px; display: flex; flex-direction: column; }
+        .sidebar-brand { display: flex; align-items: center; gap: 10px; margin-bottom: 30px; font-size: 18px; }
+        .sidebar-brand i { color: var(--accent-blue); }
+        .user-badge { background: var(--bg-surface); padding: 14px; border-radius: 12px; margin-bottom: 20px; border: 1px solid var(--border-color); }
+        .user-badge h4 { font-size: 14px; }
+        .user-badge p { font-size: 11px; color: var(--text-muted); text-transform: uppercase; margin-top: 2px; }
         
-        /* Sidebar */
-        .sidebar { width: 280px; background: #0f172a; color: white; padding: 25px 20px; display: flex; flex-direction: column; }
-        .sidebar-brand { display: flex; align-items: center; gap: 12px; margin-bottom: 40px; }
-        .sidebar-brand i { font-size: 28px; color: #38bdf8; }
-        .sidebar-brand h3 { font-size: 20px; font-weight: 700; }
-        
-        .user-profile-box { background: #1e293b; padding: 15px; border-radius: 12px; margin-bottom: 30px; display: flex; align-items: center; gap: 12px; }
-        .user-profile-box i { font-size: 32px; color: #38bdf8; }
-        .user-info h4 { font-size: 14px; font-weight: 600; }
-        .user-info p { font-size: 11px; color: #94a3b8; text-transform: uppercase; font-weight: 700; }
+        .security-box { background: rgba(16, 185, 129, 0.05); border: 1px solid rgba(16, 185, 129, 0.2); padding: 12px; border-radius: 10px; font-size: 12px; color: var(--text-muted); }
+        .security-item { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+        .security-item:last-child { margin-bottom: 0; }
+        .pulse { width: 8px; height: 8px; background: var(--accent-green); border-radius: 50%; }
+        .logout-btn { margin-top: auto; background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.2); color: var(--accent-red); padding: 12px; border-radius: 10px; cursor: pointer; font-weight: 600; }
 
-        .logout-btn { margin-top: auto; background: none; border: 1px solid #ef4444; color: #ef4444; padding: 10px; border-radius: 8px; cursor: pointer; font-weight: 600; }
-        .logout-btn:hover { background: #ef4444; color: white; }
-
-        /* Main Content */
         .main-content { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
-        .top-navbar { height: 70px; background: white; display: flex; justify-content: space-between; align-items: center; padding: 0 30px; border-bottom: 1px solid #e2e8f0; }
-        .top-navbar h2 { font-size: 20px; font-weight: 700; }
+        .navbar { height: 70px; background: var(--bg-secondary); border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; padding: 0 30px; }
+        .viewport { flex: 1; padding: 30px; overflow-y: auto; }
         
-        .dashboard-body { flex: 1; padding: 30px; overflow-y: auto; animation: fadeIn 0.5s ease; }
+        .metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; margin-bottom: 30px; }
+        .metric-card { background: var(--bg-secondary); padding: 20px; border-radius: 16px; border: 1px solid var(--border-color); }
+        .metric-card h5 { font-size: 11px; color: var(--text-muted); text-transform: uppercase; }
+        .metric-card p { font-size: 22px; font-weight: 700; margin-top: 4px; }
+        .progress { width: 100%; background: var(--bg-surface); height: 5px; border-radius: 5px; margin-top: 8px; overflow: hidden; }
+        .progress-bar { height: 100%; background: var(--accent-blue); width: 0%; transition: width 0.5s; }
 
-        /* Cards Layout */
-        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; margin-bottom: 30px; }
-        .stat-card { background: white; padding: 25px; border-radius: 16px; border: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; }
-        .stat-details h5 { font-size: 12px; color: #64748b; text-transform: uppercase; margin-bottom: 5px; }
-        .stat-details p { font-size: 24px; font-weight: 700; }
-        .stat-icon { width: 48px; height: 48px; border-radius: 12px; display: flex; justify-content: center; align-items: center; font-size: 20px; }
-
-        /* Panels */
-        .content-panel { background: white; border-radius: 16px; border: 1px solid #e2e8f0; padding: 25px; }
-        .panel-header { margin-bottom: 20px; border-bottom: 1px solid #f1f5f9; padding-bottom: 10px; }
+        .panel-grid { display: grid; grid-template-columns: 1.5fr 1fr; gap: 20px; }
+        .panel { background: var(--bg-secondary); border-radius: 16px; border: 1px solid var(--border-color); padding: 25px; }
+        .panel h3 { font-size: 16px; margin-bottom: 15px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; }
         
-        table { width: 100%; border-collapse: collapse; }
-        th { background: #f8fafc; padding: 14px; font-size: 13px; color: #64748b; text-align: left; }
-        td { padding: 16px 14px; font-size: 14px; border-bottom: 1px solid #e2e8f0; color: #334155; }
+        table { width: 100%; border-collapse: collapse; text-align: left; font-size: 13px; }
+        th { padding: 10px; color: var(--text-muted); text-transform: uppercase; border-bottom: 2px solid var(--border-color); }
+        td { padding: 12px 10px; border-bottom: 1px solid var(--border-color); }
+        .badge { padding: 3px 8px; border-radius: 8px; font-size: 11px; font-weight: 600; background: rgba(16, 185, 129, 0.1); color: var(--accent-green); }
 
-        /* Form styling */
-        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
-        .form-group { display: flex; flex-direction: column; }
-        .form-group label { font-size: 13px; font-weight: 600; margin-bottom: 6px; }
-        .form-group input, .form-group select { padding: 12px; border: 2px solid #e2e8f0; border-radius: 8px; outline: none; }
-        .submit-btn { background: #16a34a; color: white; border: none; padding: 12px 24px; border-radius: 8px; font-weight: 600; cursor: pointer; }
+        .form-group { display: flex; flex-direction: column; margin-bottom: 15px; }
+        .form-group label { font-size: 11px; color: var(--text-muted); margin-bottom: 6px; text-transform: uppercase; }
+        .form-group input { padding: 12px; background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 8px; color: white; outline: none; }
+        .submit-btn { background: var(--accent-blue); color: white; border: none; padding: 12px 24px; border-radius: 8px; font-weight: 600; cursor: pointer; }
+
+        .log-stream { display: flex; flex-direction: column; gap: 10px; max-height: 250px; overflow-y: auto; font-size: 12px; }
+        .log-card { padding: 10px; background: var(--bg-surface); border-radius: 8px; border-left: 3px solid var(--accent-blue); display: flex; gap: 8px; }
+        .log-time { color: var(--text-muted); font-family: monospace; }
     </style>
 </head>
 <body>
 
     <div id="login-screen">
         <div class="login-card">
-            <i class="fa-solid fa-shield-halved logo-icon"></i>
+            <i class="fa-solid fa-shield-halved"></i>
             <h2>PharmaConnect Pro</h2>
-            <p style="color: #64748b; font-size: 13px; margin-bottom: 20px;">Secure SFA Portal</p>
-            
-            <form onsubmit="handleSecureLogin(event)">
+            <p>Enterprise Sales Force Automation Hub</p>
+            <form onsubmit="authenticateNode(event)">
                 <div class="input-group">
-                    <label>Select Your Secure ID (User Profile)</label>
-                    <i class="fa-solid fa-user-gear"></i>
-                    <select id="secure-user-id" required>
-                        <option value="mr_rahul">MR - Rahul Verma (Ranchi Area)</option>
-                        <option value="mr_amit">MR - Amit Kumar (Jamshedpur Area)</option>
-                        <option value="asm_vikram">ASM - Vikram Rathore (Jharkhand State)</option>
-                        <option value="rsm_sanjay">RSM - Sanjay Singh (East Zone)</option>
-                        <option value="ceo_boss">CEO - Executive Mainframe</option>
+                    <label>Select System Node User</label>
+                    <select id="user-node" required>
+                        <option value="mr_rahul">MR - Rahul Verma [Ranchi Territory]</option>
+                        <option value="mr_amit">MR - Amit Kumar [Jamshedpur Territory]</option>
+                        <option value="asm_vikram">ASM - Vikram Rathore [State Controller]</option>
+                        <option value="rsm_sanjay">RSM - Sanjay Singh [Regional Director]</option>
+                        <option value="ceo_boss">CEO - Root Enterprise Administrator</option>
                     </select>
                 </div>
-                <button type="submit" class="login-btn">ACCESS DASHBOARD</button>
+                <button type="submit" class="login-btn">ACCESS PROTOCOL</button>
             </form>
         </div>
     </div>
 
     <div id="app-container">
         <div class="sidebar">
-            <div class="sidebar-brand">
-                <i class="fa-solid fa-briefcase-medical"></i>
-                <h3>PharmaConnect Pro</h3>
+            <div class="sidebar-brand"><i class="fa-solid fa-layer-group"></i> <strong>PharmaConnect</strong></div>
+            <div class="user-badge">
+                <h4 id="user-name">Loading...</h4>
+                <p id="user-rank">Loading...</p>
             </div>
-            <div class="user-profile-box">
-                <i class="fa-solid fa-id-badge" style="font-size: 28px; color: #38bdf8;"></i>
-                <div class="user-info">
-                    <h4 id="user-display-name">Loading...</h4>
-                    <p id="user-display-role">Loading...</p>
-                </div>
+            <div class="security-box">
+                <div class="security-item"><div class="pulse"></div> <span>Anti-Fake GPS: <strong>ENFORCED</strong></span></div>
+                <div class="security-item"><i class="fa-solid fa-fingerprint" style="color:var(--accent-amber)"></i> <span>Hardware Lock: <strong>SECURED</strong></span></div>
             </div>
-            <div style="font-size: 12px; color: #94a3b8; padding-left: 5px; margin-bottom: 10px;"><i class="fa-solid fa-lock" style="color:#22c55e;"></i> Privacy Lock: ACTIVE</div>
-            <div style="font-size: 12px; color: #94a3b8; padding-left: 5px;"><i class="fa-solid fa-shield" style="color:#38bdf8;"></i> Anti-Fake GPS: ON</div>
-            <button class="logout-btn" onclick="handleLogout()"><i class="fa-solid fa-power-off"></i> Exit System</button>
+            <button class="logout-btn" onclick="terminateSession()"><i class="fa-solid fa-power-off"></i> Terminate Session</button>
         </div>
-
         <div class="main-content">
-            <div class="top-navbar">
-                <h2 id="nav-title">System Dashboard</h2>
-                <div style="font-size: 13px; color: #64748b; font-weight:600;"><i class="fa-solid fa-eye-slash"></i> Data Isolated Below Your Rank</div>
-            </div>
-            <div class="dashboard-body">
-                <div class="stats-grid" id="stats-box"></div>
-                <div class="content-panel" id="panel-box"></div>
+            <div class="navbar"><h2 id="panel-title">Dashboard Matrix</h2></div>
+            <div class="viewport">
+                <div class="metrics-grid" id="metrics-box"></div>
+                <div class="panel-grid">
+                    <div class="panel" id="main-data-panel"></div>
+                    <div class="panel">
+                        <h3>System Activity Log</h3>
+                        <div class="log-stream" id="log-box"></div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
 <script>
-    // 🏢 STRICT HIERARCHICAL DATABASE
-    const sfaDatabase = {
-        mr_rahul: {
-            name: "Rahul Verma", role: "Medical Representative", hierarchy: 1,
-            stats: [{ t: "My POB Target", v: "₹45,000" }, { t: "Doctors Visited", v: "12 / 15 Today" }],
-            type: "form", area: "Ranchi Area"
-        },
-        mr_amit: {
-            name: "Amit Kumar", role: "Medical Representative", hierarchy: 1,
-            stats: [{ t: "My POB Target", v: "₹62,000" }, { t: "Doctors Visited", v: "14 / 15 Today" }],
-            type: "form", area: "Jamshedpur Area"
-        },
-        asm_vikram: {
-            name: "Vikram Rathore", role: "Area Sales Manager (ASM)", hierarchy: 2,
-            stats: [{ t: "Area Sales Overall", val: "₹1.07 Logs" }, { t: "MRs Under Command", val: "2 Active" }],
-            type: "table", th: ["MR Name", "Target Area", "Visits Logged", "POB Secured"],
-            rows: [["Rahul Verma", "Ranchi Area", "12/15", "₹45,000"], ["Amit Kumar", "Jamshedpur Area", "14/15", "₹62,000"]]
-        },
-        rsm_sanjay: {
-            name: "Sanjay Singh", role: "Regional Sales Manager (RSM)", hierarchy: 3,
-            stats: [{ t: "Regional Revenue", val: "₹12.5 Lakhs" }, { t: "ASMs Under Command", val: "3 Active" }],
-            type: "table", th: ["Area Manager (ASM)", "State/Territory", "Total Area Sales", "Status"],
-            rows: [["Vikram Rathore", "Jharkhand Territory", "₹1.07 Lakhs", "🟢 Stable"], ["Alok Prasad", "Bihar Territory", "₹4.10 Lakhs", "🟢 Stable"], ["P. K. Banerjee", "West Bengal Node", "₹7.33 Lakhs", "🔥 Exceptional"]]
-        },
-        ceo_boss: {
-            name: "Executive Mainframe", role: "Chief Executive Officer (CEO)", hierarchy: 4,
-            stats: [{ t: "Total Enterprise Revenue", val: "₹5.40 Crores" }, { t: "Global Hierarchy Nodes", val: "Full Access" }],
-            type: "table", th: ["Zone Node", "Regional Manager (RSM)", "Gross Sales", "System Health"],
-            rows: [["East Zone Hub", "Sanjay Singh", "₹12.50 Lakhs", "🟢 Secure Connection"], ["North Zone Hub", "A. K. Srivastava", "₹1.62 Crores", "🟢 Secure Connection"], ["West Zone Hub", "Milind Deora", "₹1.45 Crores", "🟢 Secure Connection"]]
-        }
+    const database = {
+        mr_rahul: { name: "Rahul Verma", rank: "Tier 1 Operative", role: "Medical Representative", metrics: [{t:"POB Target Secured", v:"78%", r:"₹45,000 Booked", b:true}, {t:"Doctor Visits", v:"12 / 15", r:"DCR Target Tracker", b:false}], type: "form" },
+        mr_amit: { name: "Amit Kumar", rank: "Tier 1 Operative", role: "Medical Representative", metrics: [{t:"POB Target Secured", v:"91%", r:"₹62,000 Booked", b:true}, {t:"Doctor Visits", v:"14 / 15", r:"DCR Target Tracker", b:false}], type: "form" },
+        asm_vikram: { name: "Vikram Rathore", rank: "Tier 2 Supervisor", role: "Area Sales Manager", metrics: [{t:"Territory Gross Revenue", v:"₹1,07,000", r:"Jharkhand Branch", b:false}, {t:"Active Operatives", v:"02 MRs Online", r:"DCR Fully Compliant", b:false}], type: "table", h:["Operative", "Territory", "Visits Tracker", "POB Ledger"], d:[["Rahul Verma", "Ranchi Area", "12 / 15 Compliant", "₹45,000"], ["Amit Kumar", "Jamshedpur Area", "14 / 15 Compliant", "₹62,000"]] },
+        rsm_sanjay: { name: "Sanjay Singh", rank: "Tier 3 Regional Director", role: "Regional Sales Manager", metrics: [{t:"Cluster Revenue Stream", v:"₹12.55 Lakhs", r:"East Zone Hub", b:false}, {t:"Reporting State Nodes", v:"03 Managed Nodes", r:"All Links Active", b:false}], type: "table", h:["Manager (ASM)", "State Node", "Gross Sales Ledger", "Link Status"], d:[["Vikram Rathore", "Jharkhand Node", "₹1.07 Lakhs", "Verified Connection"], ["Alok Prasad", "Bihar State Hub", "₹4.15 Lakhs", "Verified Connection"]] },
+        ceo_boss: { name: "Root Admin Mainframe", rank: "Tier 4 Root Controller", role: "Chief Executive Officer", metrics: [{t:"Consolidated Pipeline", v:"₹5.42 Crores", r:"Global Corporate Net", b:false}, {t:"Command Nodes Status", v:"All Core Clear", r:"Security Shield Enforced", b:false}], type: "table", h:["Zone Node", "Director (RSM)", "Gross Sales Pipeline", "Encryption Status"], d:[["East Zone Hub", "Sanjay Singh Node", "₹12.55 Lakhs", "Root Tunnel Secured"], ["North Zone Hub", "A. K. Srivastava", "₹1.62 Crores", "Root Tunnel Secured"]] }
     };
 
-    function handleSecureLogin(e) {
+    function authenticateNode(e) {
         e.preventDefault();
-        const selectedId = document.getElementById('secure-user-id').value;
-        const userData = sfaDatabase[selectedId];
-
+        const userKey = document.getElementById('user-node').value;
+        const data = database[userKey];
+        
         document.getElementById('login-screen').style.transform = 'translateY(-100%)';
-        document.getElementById('user-display-name').innerText = userData.name;
-        document.getElementById('user-display-role').innerText = userData.role;
+        document.getElementById('user-name').innerText = data.name;
+        document.getElementById('user-rank').innerText = data.rank;
+        document.getElementById('panel-title').innerText = `${data.role} Command Terminal`;
 
-        // Render Cards
-        let sHTML = '';
-        userData.stats.forEach(s => {
-            sHTML += `<div class="stat-card"><div class="stat-details"><h5>${s.t}</h5><p>${s.v || s.val}</p></div><div class="stat-icon" style="background:#e0f2fe; color:#0369a1;"><i class="fa-solid fa-chart-bar"></i></div></div>`;
+        let mHtml = '';
+        data.metrics.forEach(m => {
+            mHtml += `<div class="metric-card"><h5>${m.t}</h5><p>${m.v}</p><span style="font-size:11px;color:var(--text-muted)">${m.r}</span>${m.b ? `<div class="progress"><div class="progress-bar" style="width:${m.v}"></div></div>` : ''}</div>`;
         });
-        document.getElementById('stats-box').innerHTML = sHTML;
+        document.getElementById('metrics-box').innerHTML = mHtml;
 
-        // Render Isolated Content Box
-        const pBox = document.getElementById('panel-box');
-        if (userData.type === "form") {
-            pBox.innerHTML = `<div class="panel-header"><h3>Daily Visit Log (DCR) - Isolated For: ${userData.area}</h3><p style="font-size:12px; color:#ef4444;"><i class="fa-solid fa-lock"></i> Security Lock: Same-level MRs or Lower ranks cannot intercept this form data.</p></div><form onsubmit="event.preventDefault(); alert('Data securely pushed to ASM server nodes.');"><div class="form-row"><div class="form-group"><label>Doctor Name</label><input type="text" placeholder="Dr. Gupta" required></div><div class="form-group"><label>POB Value Booked (₹)</label><input type="number" placeholder="Enter INR Amount" required></div></div><button type="submit" class="submit-btn">SUBMIT REPORT</button></form>`;
+        const pBox = document.getElementById('main-data-panel');
+        if(data.type === "form") {
+            pBox.innerHTML = `<h3>Daily DCR Reporting Pipeline</h3><form onsubmit="event.preventDefault(); pushLog('Data packet dispatched successfully.'); alert('Secure Ledger Packet Dispatched.');"><div class="form-group"><label>Practitioner Identification Name</label><input type="text" placeholder="e.g. Dr. A. K. Mishra" required></div><div class="form-group"><label>POB Capital Value (INR)</label><input type="number" placeholder="Enter amount" required></div><button type="submit" class="submit-btn">DISPATCH PACKET</button></form>`;
         } else {
-            let tHTML = `<div class="panel-header"><h3>Rank Authed: Data stream for ${userData.role} Only</h3></div><table><thead><tr>`;
-            userData.th.forEach(h => tHTML += `<th>${h}</th>`);
-            tHTML += `</tr></thead><tbody>`;
-            userData.rows.forEach(r => {
-                tHTML += `<tr>`;
-                r.forEach(c => tHTML += `<td>${c}</td>`);
-                tHTML += `</tr>`;
+            let tHtml = `<h3>Subordinate Operational Metrics Matrix</h3><table><thead><tr>`;
+            data.h.forEach(header => tHtml += `<th>${header}</th>`);
+            tHtml += `</tr></thead><tbody>`;
+            data.d.forEach(row => {
+                tHtml += `<tr>`;
+                row.forEach((cell, idx) => tHtml += `<td>${idx===row.length-1 ? `<span class="badge">${cell}</span>` : cell}</td>`);
+                tHtml += `</tr>`;
             });
-            tHTML += `</tbody></table>`;
-            pBox.innerHTML = tHTML;
+            tHtml += `</tbody></table>`;
+            pBox.innerHTML = tHtml;
         }
 
-        const container = document.getElementById('app-container');
-        container.style.visibility = 'visible';
-        container.style.opacity = '1';
+        const appFrame = document.getElementById('app-container');
+        appFrame.style.visibility = 'visible'; appFrame.style.opacity = '1';
+        document.getElementById('log-box').innerHTML = '';
+        pushLog(`Session initialized for node account: ${data.name}`);
+        pushLog(`Biometric integrity verified. Gateway secured.`);
     }
 
-    function handleLogout() {
+    function pushLog(msg) {
+        const box = document.getElementById('log-box');
+        const time = new Date().toISOString().slice(11,19);
+        box.innerHTML = `<div class="log-card"><div class="log-time">[${time}]</div><div>${msg}</div></div>` + box.innerHTML;
+    }
+
+    function terminateSession() {
         document.getElementById('login-screen').style.transform = 'translateY(0%)';
-        const container = document.getElementById('app-container');
-        container.style.visibility = 'hidden';
-        container.style.opacity = '0';
+        const appFrame = document.getElementById('app-container');
+        appFrame.style.visibility = 'hidden'; appFrame.style.opacity = '0';
     }
 </script>
 </body>
