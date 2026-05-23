@@ -32,32 +32,20 @@
         <div id="pipeline-stream"></div>
         <button onclick="location.reload()" style="background:transparent; border:1px solid #555; margin-top:30px;">SECURE LOGOUT</button>
     </div>
-
     <script>
         const database = {
-            "MR": { 
-                role: "Field Operations Unit", 
-                pipeline: [
-                    { task: "Check-in Location", status: "Pending" },
-                    { task: "Doctor Visit Log", status: "Locked" },
-                    { task: "POB Dispatch", status: "Locked" }
-                ] 
-            },
-            "MGR": { 
-                role: "Regional Command Admin", 
-                pipeline: [
-                    { task: "Review Ledger", status: "Active" },
-                    { task: "Compliance Audit", status: "Active" },
-                    { task: "Approve Pipeline", status: "Active" }
-                ] 
-            }
+            "MR": { role: "Field Operations Unit", pipeline: [{task: "Check-in", status: "Pending"}, {task: "Visit Log", status: "Locked"}, {task: "POB Entry", status: "Locked"}] },
+            "ASM": { role: "Area Sales Manager", pipeline: [{task: "Visit Review", status: "Active"}, {task: "Primary Sales", status: "Active"}] },
+            "RSM": { role: "Regional Sales Manager", pipeline: [{task: "Regional Audit", status: "Active"}] },
+            "CEO": { role: "Corporate Command Center", pipeline: [{task: "National Overview", status: "Active"}] },
+            "MGR": { role: "Regional Command Admin", pipeline: [{task: "Review Ledger", status: "Active"}, {task: "Compliance Audit", status: "Active"}] }
         };
 
         function verify() {
             const token = document.getElementById('token').value.toUpperCase();
-            const role = token.includes("MR") ? "MR" : (token.includes("MGR") ? "MGR" : null);
+            const role = database.hasOwnProperty(token) ? token : null;
 
-            if(role) {
+            if (role) {
                 document.getElementById('gate').style.display = 'none';
                 document.getElementById('app').style.display = 'block';
                 document.getElementById('role-head').innerText = database[role].role;
@@ -68,15 +56,13 @@
                             <h3>${p.task}</h3>
                             <span class="status-pill">${p.status}</span>
                         </div>
-                        <button onclick="execute('${p.task}')" style="width:auto; padding:8px 16px;">EXECUTE</button>
+                        <button onclick="alert('Action Executed: ${p.task}')" style="width:auto; padding:8px 16px;">EXECUTE</button>
                     </div>
                 `).join('');
                 document.getElementById('pipeline-stream').innerHTML = stream;
-            } else { alert("ACCESS DENIED: Illegal Token Detected"); }
-        }
-
-        function execute(task) {
-            alert("Security Protocol: Data Logged for " + task + ". Token Encrypted.");
+            } else { 
+                alert("ACCESS DENIED: Illegal Token Detected"); 
+            }
         }
     </script>
 </body>
