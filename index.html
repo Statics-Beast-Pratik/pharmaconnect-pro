@@ -3,197 +3,81 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PharmaConnect Pro - Enterprise SFA Ecosystem</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <title>PharmaConnect | Enterprise Command Center</title>
     <style>
-        :root {
-            --bg-primary: #0b0f19; --bg-secondary: #111827; --bg-surface: #1f2937;
-            --text-main: #f9fafb; --text-muted: #9ca3af; --accent-blue: #3b82f6;
-            --accent-green: #10b981; --accent-amber: #f59e0b; --accent-red: #ef4444; --border-color: #374151;
-        }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-        body { background: var(--bg-primary); color: var(--text-main); overflow: hidden; height: 100vh; }
-        
-        #login-screen {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
-            display: flex; justify-content: center; align-items: center; z-index: 1000;
-            transition: transform 0.5s ease-in-out;
-        }
-        .login-card {
-            background: var(--bg-secondary); padding: 40px; border-radius: 24px;
-            width: 100%; max-width: 440px; border: 1px solid var(--border-color); text-align: center;
-        }
-        .login-card i { font-size: 50px; color: var(--accent-blue); margin-bottom: 15px; }
-        .login-card h2 { font-size: 24px; margin-bottom: 8px; font-weight: 700; }
-        .login-card p { color: var(--text-muted); font-size: 14px; margin-bottom: 25px; }
-        .input-group { text-align: left; margin-bottom: 20px; }
-        .input-group label { display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 8px; font-weight: 600; text-transform: uppercase; }
-        .input-group select {
-            width: 100%; padding: 14px; background: var(--bg-surface);
-            border: 1px solid var(--border-color); border-radius: 12px; color: var(--text-main); outline: none;
-        }
-        .login-btn {
-            width: 100%; padding: 14px; background: var(--accent-blue); color: white; border: none;
-            border-radius: 12px; font-size: 15px; font-weight: 600; cursor: pointer;
-        }
-
-        #app-container { display: flex; height: 100vh; width: 100vw; visibility: hidden; opacity: 0; transition: opacity 0.3s; }
-        .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border-color); padding: 25px; display: flex; flex-direction: column; }
-        .sidebar-brand { display: flex; align-items: center; gap: 10px; margin-bottom: 30px; font-size: 18px; }
-        .sidebar-brand i { color: var(--accent-blue); }
-        .user-badge { background: var(--bg-surface); padding: 14px; border-radius: 12px; margin-bottom: 20px; border: 1px solid var(--border-color); }
-        .user-badge h4 { font-size: 14px; }
-        .user-badge p { font-size: 11px; color: var(--text-muted); text-transform: uppercase; margin-top: 2px; }
-        
-        .security-box { background: rgba(16, 185, 129, 0.05); border: 1px solid rgba(16, 185, 129, 0.2); padding: 12px; border-radius: 10px; font-size: 12px; color: var(--text-muted); }
-        .security-item { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
-        .security-item:last-child { margin-bottom: 0; }
-        .pulse { width: 8px; height: 8px; background: var(--accent-green); border-radius: 50%; }
-        .logout-btn { margin-top: auto; background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.2); color: var(--accent-red); padding: 12px; border-radius: 10px; cursor: pointer; font-weight: 600; }
-
-        .main-content { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
-        .navbar { height: 70px; background: var(--bg-secondary); border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; padding: 0 30px; }
-        .viewport { flex: 1; padding: 30px; overflow-y: auto; }
-        
-        .metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; margin-bottom: 30px; }
-        .metric-card { background: var(--bg-secondary); padding: 20px; border-radius: 16px; border: 1px solid var(--border-color); }
-        .metric-card h5 { font-size: 11px; color: var(--text-muted); text-transform: uppercase; }
-        .metric-card p { font-size: 22px; font-weight: 700; margin-top: 4px; }
-        .progress { width: 100%; background: var(--bg-surface); height: 5px; border-radius: 5px; margin-top: 8px; overflow: hidden; }
-        .progress-bar { height: 100%; background: var(--accent-blue); width: 0%; transition: width 0.5s; }
-
-        .panel-grid { display: grid; grid-template-columns: 1.5fr 1fr; gap: 20px; }
-        .panel { background: var(--bg-secondary); border-radius: 16px; border: 1px solid var(--border-color); padding: 25px; }
-        .panel h3 { font-size: 16px; margin-bottom: 15px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; }
-        
-        table { width: 100%; border-collapse: collapse; text-align: left; font-size: 13px; }
-        th { padding: 10px; color: var(--text-muted); text-transform: uppercase; border-bottom: 2px solid var(--border-color); }
-        td { padding: 12px 10px; border-bottom: 1px solid var(--border-color); }
-        .badge { padding: 3px 8px; border-radius: 8px; font-size: 11px; font-weight: 600; background: rgba(16, 185, 129, 0.1); color: var(--accent-green); }
-
-        .form-group { display: flex; flex-direction: column; margin-bottom: 15px; }
-        .form-group label { font-size: 11px; color: var(--text-muted); margin-bottom: 6px; text-transform: uppercase; }
-        .form-group input { padding: 12px; background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 8px; color: white; outline: none; }
-        .submit-btn { background: var(--accent-blue); color: white; border: none; padding: 12px 24px; border-radius: 8px; font-weight: 600; cursor: pointer; }
-
-        .log-stream { display: flex; flex-direction: column; gap: 10px; max-height: 250px; overflow-y: auto; font-size: 12px; }
-        .log-card { padding: 10px; background: var(--bg-surface); border-radius: 8px; border-left: 3px solid var(--accent-blue); display: flex; gap: 8px; }
-        .log-time { color: var(--text-muted); font-family: monospace; }
+        :root { --bg: #050505; --panel: #111111; --blue: #3b82f6; --text: #f8fafc; --green: #10b981; }
+        body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', sans-serif; margin: 0; }
+        .gate { height: 100vh; display: flex; align-items: center; justify-content: center; }
+        .auth-card { width: 350px; padding: 40px; background: var(--panel); border: 1px solid #333; border-radius: 16px; text-align: center; }
+        input { width: 100%; padding: 14px; margin: 20px 0; background: #000; border: 1px solid #444; color: white; border-radius: 8px; box-sizing: border-box; }
+        button { width: 100%; padding: 14px; background: var(--blue); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
+        #app { display: none; padding: 30px; }
+        .pipeline-node { background: #1a1a1a; padding: 20px; margin: 20px 0; border-left: 5px solid var(--blue); border-radius: 8px; display: flex; justify-content: space-between; align-items: center; }
+        .status-pill { padding: 5px 12px; border-radius: 20px; font-size: 12px; background: #222; }
     </style>
 </head>
 <body>
 
-    <div id="login-screen">
-        <div class="login-card">
-            <i class="fa-solid fa-shield-halved"></i>
-            <h2>PharmaConnect Pro</h2>
-            <p>Enterprise Sales Force Automation Hub</p>
-            <form onsubmit="authenticateNode(event)">
-                <div class="input-group">
-                    <label>Select System Node User</label>
-                    <select id="user-node" required>
-                        <option value="mr_rahul">MR - Rahul Verma [Ranchi Territory]</option>
-                        <option value="mr_amit">MR - Amit Kumar [Jamshedpur Territory]</option>
-                        <option value="asm_vikram">ASM - Vikram Rathore [State Controller]</option>
-                        <option value="rsm_sanjay">RSM - Sanjay Singh [Regional Director]</option>
-                        <option value="ceo_boss">CEO - Root Enterprise Administrator</option>
-                    </select>
-                </div>
-                <button type="submit" class="login-btn">ACCESS PROTOCOL</button>
-            </form>
+    <div class="gate" id="gate">
+        <div class="auth-card">
+            <h2>System Authentication</h2>
+            <p>Access Token Required</p>
+            <input type="text" id="token" placeholder="Enter Token (MR/MGR)">
+            <button onclick="verify()">ACCESS TERMINAL</button>
         </div>
     </div>
 
-    <div id="app-container">
-        <div class="sidebar">
-            <div class="sidebar-brand"><i class="fa-solid fa-layer-group"></i> <strong>PharmaConnect</strong></div>
-            <div class="user-badge">
-                <h4 id="user-name">Loading...</h4>
-                <p id="user-rank">Loading...</p>
-            </div>
-            <div class="security-box">
-                <div class="security-item"><div class="pulse"></div> <span>Anti-Fake GPS: <strong>ENFORCED</strong></span></div>
-                <div class="security-item"><i class="fa-solid fa-fingerprint" style="color:var(--accent-amber)"></i> <span>Hardware Lock: <strong>SECURED</strong></span></div>
-            </div>
-            <button class="logout-btn" onclick="terminateSession()"><i class="fa-solid fa-power-off"></i> Terminate Session</button>
-        </div>
-        <div class="main-content">
-            <div class="navbar"><h2 id="panel-title">Dashboard Matrix</h2></div>
-            <div class="viewport">
-                <div class="metrics-grid" id="metrics-box"></div>
-                <div class="panel-grid">
-                    <div class="panel" id="main-data-panel"></div>
-                    <div class="panel">
-                        <h3>System Activity Log</h3>
-                        <div class="log-stream" id="log-box"></div>
+    <div id="app">
+        <h1 id="role-head"></h1>
+        <div id="pipeline-stream"></div>
+        <button onclick="location.reload()" style="background:transparent; border:1px solid #555; margin-top:30px;">SECURE LOGOUT</button>
+    </div>
+
+    <script>
+        const database = {
+            "MR": { 
+                role: "Field Operations Unit", 
+                pipeline: [
+                    { task: "Check-in Location", status: "Pending" },
+                    { task: "Doctor Visit Log", status: "Locked" },
+                    { task: "POB Dispatch", status: "Locked" }
+                ] 
+            },
+            "MGR": { 
+                role: "Regional Command Admin", 
+                pipeline: [
+                    { task: "Review Ledger", status: "Active" },
+                    { task: "Compliance Audit", status: "Active" },
+                    { task: "Approve Pipeline", status: "Active" }
+                ] 
+            }
+        };
+
+        function verify() {
+            const token = document.getElementById('token').value.toUpperCase();
+            const role = token.includes("MR") ? "MR" : (token.includes("MGR") ? "MGR" : null);
+
+            if(role) {
+                document.getElementById('gate').style.display = 'none';
+                document.getElementById('app').style.display = 'block';
+                document.getElementById('role-head').innerText = database[role].role;
+                
+                let stream = database[role].pipeline.map(p => `
+                    <div class="pipeline-node">
+                        <div>
+                            <h3>${p.task}</h3>
+                            <span class="status-pill">${p.status}</span>
+                        </div>
+                        <button onclick="execute('${p.task}')" style="width:auto; padding:8px 16px;">EXECUTE</button>
                     </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-<script>
-    const database = {
-        mr_rahul: { name: "Rahul Verma", rank: "Tier 1 Operative", role: "Medical Representative", metrics: [{t:"POB Target Secured", v:"78%", r:"₹45,000 Booked", b:true}, {t:"Doctor Visits", v:"12 / 15", r:"DCR Target Tracker", b:false}], type: "form" },
-        mr_amit: { name: "Amit Kumar", rank: "Tier 1 Operative", role: "Medical Representative", metrics: [{t:"POB Target Secured", v:"91%", r:"₹62,000 Booked", b:true}, {t:"Doctor Visits", v:"14 / 15", r:"DCR Target Tracker", b:false}], type: "form" },
-        asm_vikram: { name: "Vikram Rathore", rank: "Tier 2 Supervisor", role: "Area Sales Manager", metrics: [{t:"Territory Gross Revenue", v:"₹1,07,000", r:"Jharkhand Branch", b:false}, {t:"Active Operatives", v:"02 MRs Online", r:"DCR Fully Compliant", b:false}], type: "table", h:["Operative", "Territory", "Visits Tracker", "POB Ledger"], d:[["Rahul Verma", "Ranchi Area", "12 / 15 Compliant", "₹45,000"], ["Amit Kumar", "Jamshedpur Area", "14 / 15 Compliant", "₹62,000"]] },
-        rsm_sanjay: { name: "Sanjay Singh", rank: "Tier 3 Regional Director", role: "Regional Sales Manager", metrics: [{t:"Cluster Revenue Stream", v:"₹12.55 Lakhs", r:"East Zone Hub", b:false}, {t:"Reporting State Nodes", v:"03 Managed Nodes", r:"All Links Active", b:false}], type: "table", h:["Manager (ASM)", "State Node", "Gross Sales Ledger", "Link Status"], d:[["Vikram Rathore", "Jharkhand Node", "₹1.07 Lakhs", "Verified Connection"], ["Alok Prasad", "Bihar State Hub", "₹4.15 Lakhs", "Verified Connection"]] },
-        ceo_boss: { name: "Root Admin Mainframe", rank: "Tier 4 Root Controller", role: "Chief Executive Officer", metrics: [{t:"Consolidated Pipeline", v:"₹5.42 Crores", r:"Global Corporate Net", b:false}, {t:"Command Nodes Status", v:"All Core Clear", r:"Security Shield Enforced", b:false}], type: "table", h:["Zone Node", "Director (RSM)", "Gross Sales Pipeline", "Encryption Status"], d:[["East Zone Hub", "Sanjay Singh Node", "₹12.55 Lakhs", "Root Tunnel Secured"], ["North Zone Hub", "A. K. Srivastava", "₹1.62 Crores", "Root Tunnel Secured"]] }
-    };
-
-    function authenticateNode(e) {
-        e.preventDefault();
-        const userKey = document.getElementById('user-node').value;
-        const data = database[userKey];
-        
-        document.getElementById('login-screen').style.transform = 'translateY(-100%)';
-        document.getElementById('user-name').innerText = data.name;
-        document.getElementById('user-rank').innerText = data.rank;
-        document.getElementById('panel-title').innerText = `${data.role} Command Terminal`;
-
-        let mHtml = '';
-        data.metrics.forEach(m => {
-            mHtml += `<div class="metric-card"><h5>${m.t}</h5><p>${m.v}</p><span style="font-size:11px;color:var(--text-muted)">${m.r}</span>${m.b ? `<div class="progress"><div class="progress-bar" style="width:${m.v}"></div></div>` : ''}</div>`;
-        });
-        document.getElementById('metrics-box').innerHTML = mHtml;
-
-        const pBox = document.getElementById('main-data-panel');
-        if(data.type === "form") {
-            pBox.innerHTML = `<h3>Daily DCR Reporting Pipeline</h3><form onsubmit="event.preventDefault(); pushLog('Data packet dispatched successfully.'); alert('Secure Ledger Packet Dispatched.');"><div class="form-group"><label>Practitioner Identification Name</label><input type="text" placeholder="e.g. Dr. A. K. Mishra" required></div><div class="form-group"><label>POB Capital Value (INR)</label><input type="number" placeholder="Enter amount" required></div><button type="submit" class="submit-btn">DISPATCH PACKET</button></form>`;
-        } else {
-            let tHtml = `<h3>Subordinate Operational Metrics Matrix</h3><table><thead><tr>`;
-            data.h.forEach(header => tHtml += `<th>${header}</th>`);
-            tHtml += `</tr></thead><tbody>`;
-            data.d.forEach(row => {
-                tHtml += `<tr>`;
-                row.forEach((cell, idx) => tHtml += `<td>${idx===row.length-1 ? `<span class="badge">${cell}</span>` : cell}</td>`);
-                tHtml += `</tr>`;
-            });
-            tHtml += `</tbody></table>`;
-            pBox.innerHTML = tHtml;
+                `).join('');
+                document.getElementById('pipeline-stream').innerHTML = stream;
+            } else { alert("ACCESS DENIED: Illegal Token Detected"); }
         }
 
-        const appFrame = document.getElementById('app-container');
-        appFrame.style.visibility = 'visible'; appFrame.style.opacity = '1';
-        document.getElementById('log-box').innerHTML = '';
-        pushLog(`Session initialized for node account: ${data.name}`);
-        pushLog(`Biometric integrity verified. Gateway secured.`);
-    }
-
-    function pushLog(msg) {
-        const box = document.getElementById('log-box');
-        const time = new Date().toISOString().slice(11,19);
-        box.innerHTML = `<div class="log-card"><div class="log-time">[${time}]</div><div>${msg}</div></div>` + box.innerHTML;
-    }
-
-    function terminateSession() {
-        document.getElementById('login-screen').style.transform = 'translateY(0%)';
-        const appFrame = document.getElementById('app-container');
-        appFrame.style.visibility = 'hidden'; appFrame.style.opacity = '0';
-    }
-</script>
+        function execute(task) {
+            alert("Security Protocol: Data Logged for " + task + ". Token Encrypted.");
+        }
+    </script>
 </body>
 </html>
-
