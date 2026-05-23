@@ -34,7 +34,14 @@
     </div>
     <script>
         const database = {
-            "MR": { role: "Field Operations Unit", pipeline: [{task: "Check-in", status: "Pending"}, {task: "Visit Log", status: "Locked"}, {task: "POB Entry", status: "Locked"}] },
+            "MR": { 
+                role: "Field Operations Unit", 
+                pipeline: [
+                    { task: "Check-in", status: "Pending" },
+                    { task: "Visit Log", status: "Locked" },
+                    { task: "POB Entry", status: "Locked" }
+                ] 
+            },
             "ASM": { role: "Area Sales Manager", pipeline: [{task: "Visit Review", status: "Active"}, {task: "Primary Sales", status: "Active"}] },
             "RSM": { role: "Regional Sales Manager", pipeline: [{task: "Regional Audit", status: "Active"}] },
             "CEO": { role: "Corporate Command Center", pipeline: [{task: "National Overview", status: "Active"}] },
