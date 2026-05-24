@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Manager Dashboard</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; background: #f1f5f9; }
+        table { width: 100%; border-collapse: collapse; background: white; }
+        th, td { padding: 12px; border: 1px solid #ddd; text-align: left; }
+        th { background: #0f172a; color: white; }
+    </style>
+</head>
+<body>
+    <h2>Field Reports - Manager View</h2>
+    <table border="1">
+        <thead><tr><th>Task</th><th>Details</th><th>Time</th></tr></thead>
+        <tbody id="reportTable"></tbody>
+    </table>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyC51Lcc5QyXNSrv56Hb0Y7c-JhYWpy6ovk",
+            authDomain: "pharmaconnect-pro.firebaseapp.com",
+            projectId: "pharmaconnect-pro",
+            databaseURL: "https://pharmaconnect-pro-default-rtdb.asia-southeast1.firebasedatabase.app",
+            storageBucket: "pharmaconnect-pro.appspot.com",
+            messagingSenderId: "556049193150",
+            appId: "1:556049193150:web:58daa8b31ace3299e7a6ef"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        onValue(ref(db, 'reports/'), (snapshot) => {
+            const data = snapshot.val();
+            const table = document.getElementById('reportTable');
+            table.innerHTML = ""; 
+            for (let id in data) {
+                table.innerHTML += `<tr><td>${data[id].task}</td><td>${data[id].details}</td><td>${data[id].timestamp}</td></tr>`;
+            }
+        });
+    </script>
+</body>
+</html>
+
