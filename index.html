@@ -30,7 +30,9 @@
                     details: data,
                     timestamp: new Date().toISOString()
                 }).then(() => {
-                    alert("Success: " + task + " synced to server.");
+                    document.body.insertAdjacentHTML('beforeend', '<div style="position:fixed; bottom:20px; right:20px; background:#22c55e; color:white; padding:15px; border-radius:8px; font-family:sans-serif; z-index:9999; box-shadow:0 4px 6px rgba(0,0,0,0.1);">Entry Synced Successfully!</div>');
+setTimeout(() => document.body.lastElementChild.remove(), 3000);
+                    
                 }).catch((error) => {
                     alert("Error: Data not synced. Check connection.");
                 });
