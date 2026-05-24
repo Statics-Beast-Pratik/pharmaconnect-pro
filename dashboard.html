@@ -4,52 +4,60 @@
     <title>Manager Dashboard</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <style>
-        body { font-family: sans-serif; padding: 20px; background: #f1f5f9; }
-        table { width: 100%; border-collapse: collapse; background: white; }
-        th, td { padding: 12px; border: 1px solid #ddd; text-align: left; }
-        th { background: #0f172a; color: white; }
-    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
 </head>
 <body>
     <h2>Field Reports - Manager View</h2>
-    <table border="1">
-        <thead><tr><th>Task</th><th>Details</th><th>Time</th></tr></thead>
-        <tbody id="reportTable"></tbody>
+    <button onclick="downloadPDF()" style="margin-bottom:15px; padding:10px 20px; background:#e11d48; color:white; border:none; border-radius:5px; cursor:pointer;">Download PDF Report</button>
+    <table id="reportTable" border="1">
+        <thead>
+            <tr><th>Task</th><th>Details</th><th>Time</th></tr>
+        </thead>
+        <tbody id="reportTableBody"></tbody>
     </table>
 
     <script type="module">
-          const pass = prompt("Enter Password to Access Dashboard:");
-    if (pass !== "2511") { 
-        document.body.innerHTML = "<h1 style='text-align:center; margin-top:50px;'>Access Denied!</h1>";
-        throw new Error("Unauthorized");
-    }
-        
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
         import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-database.js";
 
+        // Password protection
+        const pass = prompt("Enter Password to Access Dashboard:");
+        if (pass !== "2511") {
+            document.body.innerHTML = "<h1>Access Denied</h1>";
+            throw new Error("Unauthorized");
+        }
+
+        // Configuration
         const firebaseConfig = {
             apiKey: "AIzaSyC51Lcc5QyXNSrv56Hb0Y7c-JhYWpy6ovk",
             authDomain: "pharmaconnect-pro.firebaseapp.com",
             projectId: "pharmaconnect-pro",
-            databaseURL: "https://pharmaconnect-pro-default-rtdb.asia-southeast1.firebasedatabase.app",
+            databaseURL: "https://pharmaconnect-pro-default-rtdb.asia-southeast1.firebaseio.com",
             storageBucket: "pharmaconnect-pro.appspot.com",
             messagingSenderId: "556049193150",
             appId: "1:556049193150:web:58daa8b31ace3299e7a6ef"
         };
-
+        
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
 
         onValue(ref(db, 'reports/'), (snapshot) => {
             const data = snapshot.val();
-            const table = document.getElementById('reportTable');
-            table.innerHTML = ""; 
+            const tbody = document.getElementById("reportTableBody");
+            tbody.innerHTML = "";
             for (let id in data) {
-                table.innerHTML += `<tr><td>${data[id].task}</td><td>${data[id].details}</td><td>${data[id].timestamp}</td></tr>`;
+                let row = `<tr><td>${data[id].task}</td><td>${data[id].details}</td><td>${data[id].timestamp}</td></tr>`;
+                tbody.innerHTML += row;
             }
         });
+
+        window.downloadPDF = function() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            doc.text("Field Reports", 14, 15);
+            doc.autoTable({ html: '#reportTable', startY: 20 });
+            doc.save('PharmaConnect_Report.pdf');
+        }
     </script>
 </body>
 </html>
-
