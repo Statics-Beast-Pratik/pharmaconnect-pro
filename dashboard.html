@@ -17,6 +17,12 @@
     </table>
 
     <script type="module">
+          const pass = prompt("Enter Password to Access Dashboard:");
+    if (pass !== "2511") { 
+        document.body.innerHTML = "<h1 style='text-align:center; margin-top:50px;'>Access Denied!</h1>";
+        throw new Error("Unauthorized");
+    }
+        
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
         import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-database.js";
 
