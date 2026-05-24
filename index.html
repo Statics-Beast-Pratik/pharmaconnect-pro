@@ -2,16 +2,17 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>PharmaConnect Pro</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SFA Core App</title>
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
         import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-database.js";
 
-        // Ye raha tera unique config
         const firebaseConfig = {
             apiKey: "AIzaSyC51Lcc5QyXNSrv56Hb0Y7c-JhYWpy6ovk",
             authDomain: "pharmaconnect-pro.firebaseapp.com",
             projectId: "pharmaconnect-pro",
+            databaseURL: "https://pharmaconnect-pro-default-rtdb.asia-southeast1.firebasedatabase.app",
             storageBucket: "pharmaconnect-pro.appspot.com",
             messagingSenderId: "556049193150",
             appId: "1:556049193150:web:58daa8b31ace3299e7a6ef"
@@ -20,40 +21,35 @@
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
 
-        // Data sync function
-        window.submitData = function(task, data) {
-            push(ref(db, 'reports/'), {
-                task: task,
-                info: data,
-                timestamp: new Date().toLocaleString()
-            });
-            alert("Data synced to Cloud!");
+        window.submitEntry = function(task) {
+            const data = prompt("Enter " + task + " details:");
+            if (data && data.trim() !== "") {
+                push(ref(db, 'reports/'), {
+                    task: task,
+                    details: data,
+                    timestamp: new Date().toISOString()
+                }).then(() => {
+                    alert("Success: " + task + " synced to server.");
+                }).catch((error) => {
+                    alert("Error: Data not synced. Check connection.");
+                });
+            } else {
+                alert("Entry cancelled or empty.");
+            }
         };
     </script>
     <style>
-        body { background: #0f172a; color: white; font-family: sans-serif; padding: 20px; }
-        .card { background: #1e293b; padding: 20px; border-radius: 12px; margin-bottom: 10px; }
-        button { width: 100%; padding: 14px; margin-top: 10px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; color: white; background: #3b82f6; }
+        body { font-family: sans-serif; background: #f8fafc; display: flex; justify-content: center; padding: 20px; }
+        .container { width: 100%; max-width: 400px; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        button { width: 100%; padding: 15px; margin: 10px 0; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; background: #0f172a; color: white; }
     </style>
 </head>
 <body>
-    <div id="app-screen">
-        <div class="card">
-            <h2>SFA Dashboard</h2>
-            <div id="tasks-area">
-                <button onclick="capture('Check-in')">Check-in</button>
-                <button onclick="capture('POB Entry')">POB Entry</button>
-            </div>
-        </div>
+    <div class="container">
+        <h2>SFA Core</h2>
+        <button onclick="submitEntry('Check-in')">Check-in</button>
+        <button onclick="submitEntry('POB Entry')">POB Entry</button>
+        <button onclick="submitEntry('Retailer Visit')">Retailer Visit</button>
     </div>
-    <script>
-        function capture(task) {
-            let data = prompt("Enter " + task + " Details:");
-            if (data) {
-                submitData(task, data);
-            }
-        }
-    </script>
 </body>
 </html>
-
